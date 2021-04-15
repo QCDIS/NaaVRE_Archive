@@ -34,10 +34,11 @@ class ExtractorHandler(APIHandler):
 
         imports = Extractor.extract_imports(sources)
         source = notebook.cells[cell_index].source
+        all_undefined = Extractor.extract_all_undefined(sources)
 
         undefined = [ und for und in Extractor.extract_undefined(source) if und not in imports ]
         names = Extractor.extract_names(source)
-        clean_names = [ name for name in names if name not in undefined and name not in imports ]
+        clean_names = [ name for name in names if name not in undefined and name not in imports and name in all_undefined]
 		
         title = source.partition('\n')[0]
         title = title if title[0] == "#" else "Untitled"

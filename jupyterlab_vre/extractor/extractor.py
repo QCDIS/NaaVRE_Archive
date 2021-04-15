@@ -35,6 +35,14 @@ class Extractor:
 
 
     @staticmethod
+    def extract_all_undefined(sources):
+        all_undefined = set()
+        for source in sources:
+            all_undefined.update(Extractor.extract_undefined(source))
+        return all_undefined
+
+
+    @staticmethod
     def extract_undefined(code):
 
         flakes_stdout = StreamList()
