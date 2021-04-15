@@ -1,0 +1,18 @@
+{%- if deps|length >0 -%}
+{%- for d in deps %}
+{{ d }}
+{%- endfor %}
+{% endif %}
+{%- if cell.ins|length > 0 %}
+from VRE import datastore
+datastore.set_data_dir("{{ data_dir }}")
+{% for in_var in cell.ins|sort %}
+{{ in_var }} = datastore.load("{{ in_var }}")
+{%- endfor %}
+{% endif %}
+{{ cell.source }}
+{%- if cell.outs|length > 0 %}
+{% for out_var in cell.outs|sort %}
+{{ out_var }} = datastore.save("{{ out_var }}")
+{%- endfor %}
+{% endif %}
