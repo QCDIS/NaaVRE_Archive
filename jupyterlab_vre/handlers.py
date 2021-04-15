@@ -41,7 +41,7 @@ class ExtractorHandler(APIHandler):
         clean_names = [ name for name in names if name not in undefined and name not in imports and name in all_undefined]
 		
         title = source.partition('\n')[0]
-        title = title if title[0] == "#" else "Untitled"
+        title = title.replace('#', '').strip() if title[0] == "#" else "Untitled"
         
         ins = set(undefined)
         outs = set(clean_names)
