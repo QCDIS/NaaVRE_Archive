@@ -18,7 +18,7 @@ class Extractor:
                             imports[key] = {
                                 'name'	: n.name,
                                 'asname': n.asname or None,
-                                'module': node.module
+                                'module': node.module if isinstance(node, ast.ImportFrom) else ""
                             }
         return imports
 
