@@ -42,20 +42,20 @@
 }
 
 .lw-panel-editor {
-    width: 500px;
-    height: 250px;
+    width: 350px;
+    height: 200px;
     overflow: hidden;
     padding: 20px;
 }
 
 .lw-panel-editor-container {
-    width: 500px;
-    height: 250px;
+    width: 350px;
+    height: 200px;
     margin: 20px;
 }
 
 .lw-panel-table {
-    width: 500px !important;
+    width: 350px !important;
     margin: 20px;
 }
 

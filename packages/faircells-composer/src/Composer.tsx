@@ -18,7 +18,7 @@ const Composer = () => (
     </Content>
     <Sidebar>
       <Message>
-        Local Catalog
+        Local Catalogue
       </Message>
       <SidebarItem
         type="top/bottom"
