@@ -78,6 +78,7 @@ export class CellTracker extends React.Component<IProps, IState> {
 
         this.currNodeId = resp['node_id'];
         this.setState(resp['chart']);
+        console.log(resp['chart']);
     }
 
     addToCatalog = async () => {
