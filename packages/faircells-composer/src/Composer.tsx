@@ -3,7 +3,12 @@ import { ReactWidget } from '@jupyterlab/apputils';
 import styled from 'styled-components'
 import { Content, Page, Sidebar, SidebarItem } from './components';
 import { chartSimple } from './exampleChart';
-import { FlowChartWithState } from '@mrblenny/react-flow-chart';
+import { FlowChartWithState, INodeInnerDefaultProps } from '@mrblenny/react-flow-chart';
+
+const Outer = styled.div`
+  padding: 30px;
+  width: 250px;
+`
 
 const Message = styled.div`
 margin: 10px;
@@ -11,101 +16,156 @@ padding: 10px;
 background: rgba(0,0,0,0.05);
 `
 
+const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
+
+  return (
+      <Outer>
+          <p>{node.properties.title}</p>
+          <br />
+      </Outer>
+  )
+}
+
 const Composer = () => (
     <Page>
     <Content>
-      <FlowChartWithState initialValue={chartSimple} />
+      <FlowChartWithState 
+        initialValue={chartSimple}
+        Components={{
+          NodeInner: NodeInnerCustom
+      }}
+      />
     </Content>
     <Sidebar>
       <Message>
         Local Catalogue
       </Message>
       <SidebarItem
-        type="top/bottom"
+        type="Load Point Cloud"
         ports={ {
           port1: {
             id: 'port1',
-            type: 'top',
-            properties: {
-              custom: 'property',
-            },
-          },
-          port2: {
-            id: 'port1',
             type: 'bottom',
-            properties: {
-              custom: 'property',
-            },
           },
         } }
         properties={ {
-          custom: 'property',
+          title: 'Load Point Cloud',
         }}
       />
       <SidebarItem
-        type="bottom-only"
+        type="Normalize Point Cloud"
+        ports={ {
+          port1: {
+            id: 'port1',
+            type: 'top',
+          },
+          port2: {
+            id: 'port2',
+            type: 'bottom',
+          }
+        } }
+        properties={ {
+          title: 'Normalize Point Cloud',
+        }}
+      />
+      <SidebarItem
+        type="Polygon"
         ports={ {
           port1: {
             id: 'port1',
             type: 'bottom',
-            properties: {
-              custom: 'property',
-            },
           },
+        } }
+        properties={ {
+          title: 'Polygon',
         }}
       />
       <SidebarItem
-        type="left-right"
+        type="Attribute"
         ports={ {
           port1: {
             id: 'port1',
-            type: 'left',
-            properties: {
-              custom: 'property',
-            },
+            type: 'bottom',
           },
-          port2: {
-            id: 'port2',
-            type: 'right',
-            properties: {
-              custom: 'property',
-            },
-          },
+        } }
+        properties={ {
+          title: 'Attribute',
         }}
       />
       <SidebarItem
-        type="all-sides"
+        type="Volume"
         ports={ {
           port1: {
             id: 'port1',
-            type: 'left',
-
+            type: 'bottom',
+          },
+        } }
+        properties={ {
+          title: 'Volume',
+        }}
+      />
+      <SidebarItem
+        type="Export"
+        ports={ {
+          port1: {
+            id: 'port1',
+            type: 'top',
+          },
+        } }
+        properties={ {
+          title: 'Export',
+        }}
+      />
+      <SidebarItem
+        type="Filter Points by Polygon"
+        ports={ {
+          port1: {
+            id: 'port1',
+            type: 'top',
           },
           port2: {
             id: 'port2',
-            type: 'right',
+            type: 'top',
           },
           port3: {
             id: 'port3',
-            type: 'top',
-          },
-          port4: {
-            id: 'port4',
             type: 'bottom',
-          },
+          }
+        } }
+        properties={ {
+          title: 'Filter Points by Polygon',
         }}
       />
       <SidebarItem
-        type="lots-of-ports"
+        type="Filter Points by Attribute"
         ports={ {
           port1: {
             id: 'port1',
-            type: 'left',
-
+            type: 'top',
           },
           port2: {
             id: 'port2',
-            type: 'right',
+            type: 'top',
+          },
+          port3: {
+            id: 'port3',
+            type: 'bottom',
+          }
+        } }
+        properties={ {
+          title: 'Filter Points by Attribute',
+        }}
+      />
+      <SidebarItem
+        type="Compute Neighboors"
+        ports={ {
+          port1: {
+            id: 'port1',
+            type: 'top',
+          },
+          port2: {
+            id: 'port2',
+            type: 'top',
           },
           port3: {
             id: 'port3',
@@ -117,36 +177,39 @@ const Composer = () => (
           },
           port5: {
             id: 'port5',
-            type: 'left',
-          },
-          port6: {
-            id: 'port6',
-            type: 'right',
-          },
-          port7: {
-            id: 'port7',
+            type: 'bottom',
+          }
+        } }
+        properties={ {
+          title: 'Compute Neighboors',
+        }}
+      />
+      <SidebarItem
+        type="Compute Features"
+        ports={ {
+          port1: {
+            id: 'port1',
             type: 'top',
           },
-          port8: {
-            id: 'port8',
-            type: 'bottom',
-          },
-          port9: {
-            id: 'port9',
-            type: 'left',
-          },
-          port10: {
-            id: 'port10',
-            type: 'right',
-          },
-          port11: {
-            id: 'port11',
+          port2: {
+            id: 'port2',
             type: 'top',
           },
-          port12: {
-            id: 'port12',
-            type: 'bottom',
+          port3: {
+            id: 'port3',
+            type: 'top',
           },
+          port4: {
+            id: 'port4',
+            type: 'top',
+          },
+          port5: {
+            id: 'port5',
+            type: 'bottom',
+          }
+        } }
+        properties={ {
+          title: 'Compute Features',
         }}
       />
     </Sidebar>
