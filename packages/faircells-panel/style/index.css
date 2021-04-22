@@ -56,7 +56,7 @@
 
 .lw-panel-table {
     width: 350px !important;
-    margin: 20px;
+    margin: 20px 0px 0px 20px;
 }
 
 .lw-panel-preview {
@@ -71,10 +71,6 @@
     margin: 20px;
 }
 
-.lw-panel-gen-btn {
-    margin-left: 20px !important;
-}
-
-.lw-panel-gen-btn-prog {
-    margin-left: 10px;
+.lw-panel-button {
+    margin: 20px 0px 20px 20px !important;
 }

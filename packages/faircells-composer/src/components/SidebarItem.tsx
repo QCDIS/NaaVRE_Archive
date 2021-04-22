@@ -3,9 +3,10 @@ import * as React from 'react'
 import styled from 'styled-components'
 
 const Outer = styled.div`
-  padding: 20px 30px;
+  padding: 16px 20px;
   font-size: 14px;
   background: white;
+  border-bottom: 1px solid #eeeeee;
   cursor: move;
 `
 

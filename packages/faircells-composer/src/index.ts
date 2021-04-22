@@ -23,13 +23,13 @@ const extension: JupyterFrontEndPlugin<void> = {
         const { commands } = app;
         const command = CommandIDs.create;
         commands.addCommand(command, {
-            caption: 'Launch FAIRCells Composer',
-            label: 'FAIRCells Composer',
+            caption: 'Launch Workflow Composition',
+            label: 'Workflow Composition',
             icon: args => (args['isPalette'] ? null : buildIcon),
             execute: () => {
               const content = new ComposerWidget();
               const widget = new MainAreaWidget<ComposerWidget>({ content });
-              widget.title.label = 'FAIRCells Composer';
+              widget.title.label = 'Workflow Composition';
               widget.title.icon = buildIcon;
               app.shell.add(widget, 'main');
             }

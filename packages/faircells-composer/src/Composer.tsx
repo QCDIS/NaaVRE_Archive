@@ -6,14 +6,13 @@ import { chartSimple } from './exampleChart';
 import { FlowChartWithState, INodeInnerDefaultProps } from '@mrblenny/react-flow-chart';
 
 const Outer = styled.div`
-  padding: 30px;
-  width: 250px;
+padding: 10px;
+width: 100px;
 `
 
 const Message = styled.div`
-margin: 10px;
-padding: 10px;
-background: rgba(0,0,0,0.05);
+padding: 20px;
+background: #ff8c5a;
 `
 
 const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
@@ -38,7 +37,7 @@ const Composer = () => (
     </Content>
     <Sidebar>
       <Message>
-        Local Catalogue
+        VRE Catalog
       </Message>
       <SidebarItem
         type="Load Point Cloud"

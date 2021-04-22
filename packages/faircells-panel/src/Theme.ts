@@ -21,14 +21,14 @@ declare module '@material-ui/core/styles/createMuiTheme' {
 export const theme = createMuiTheme({
   palette: {
     secondary: {
-      main: '#00e676',
-      dark: '#00a152',
-      light: '#33eb91',
+      main: '#ea5b2d',
+      dark: '#b12800',
+      light: '#ff8c5a',
     },
     primary: {
-      main: '#2196f3',
-      dark: '#1769aa',
-      light: '#4dabf5',
+      main: '#0f4e8a',
+      dark: '#00275c',
+      light: '#4e79ba',
     },
   },
 });

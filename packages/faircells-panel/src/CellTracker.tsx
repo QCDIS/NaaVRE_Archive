@@ -8,16 +8,16 @@ import { INotebookModel, Notebook, NotebookPanel } from '@jupyterlab/notebook';
 import { DocumentRegistry } from '@jupyterlab/docregistry';
 import { Cell } from '@jupyterlab/cells';
 import Table from '@material-ui/core/Table';
-// import TableBody from '@material-ui/core/TableBody';
+import { theme } from './Theme';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { TableBody } from "@material-ui/core";
+import { Button, TableBody, ThemeProvider } from "@material-ui/core";
 
 const Outer = styled.div`
-  padding: 30px;
-  width: 250px;
+  padding: 10px;
+  width: 100px;
 `
 
 const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
@@ -159,41 +159,48 @@ export class CellTracker extends React.Component<IProps, IState> {
 
     render() {
         return (
-            <div>
-                <p className={'lw-panel-preview'}>Node Preview: </p>
-                    <div className={'lw-panel-editor'}>
-                        <FlowChart
-                            chart={this.state}
-                            callbacks={this.stateActions}
-                            Components={{
-                                NodeInner: NodeInnerCustom
-                            }}
-                        />
-                    </div>
-                    {this.currNodeId ? (
-                        <TableContainer component={Paper} className={'lw-panel-table'}>
-                            <Table aria-label="simple table">
-                                <TableBody>
-                                {this.state.nodes[this.currNodeId].properties['vars'].map((variable: any) => (
-                                    <TableRow key={variable.name}>
-                                        <TableCell component="th" scope="row">
-                                            {variable.name}
-                                        </TableCell>
-                                        <TableCell component="th" scope="row">
-                                            {variable.direction}
-                                        </TableCell>
-                                        <TableCell component="th" scope="row">
-                                            {variable.datatype}
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                            </Table>
-                        </TableContainer>
-                    ) :(
-                        <TableContainer></TableContainer>
-                    )}
-            </div>
+            <ThemeProvider theme={theme}>
+                <div>
+                    <p className={'lw-panel-preview'}>Node Preview: </p>
+                        <div className={'lw-panel-editor'}>
+                            <FlowChart
+                                chart={this.state}
+                                callbacks={this.stateActions}
+                                Components={{
+                                    NodeInner: NodeInnerCustom
+                                }}
+                            />
+                        </div>
+                        {this.currNodeId ? (
+                            <TableContainer component={Paper} className={'lw-panel-table'}>
+                                <Table aria-label="simple table">
+                                    <TableBody>
+                                    {this.state.nodes[this.currNodeId].properties['vars'].map((variable: any) => (
+                                        <TableRow key={variable.name}>
+                                            <TableCell component="th" scope="row">
+                                                {variable.name}
+                                            </TableCell>
+                                            <TableCell component="th" scope="row">
+                                                {variable.direction}
+                                            </TableCell>
+                                            <TableCell component="th" scope="row">
+                                                {variable.datatype}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                                </Table>
+                            </TableContainer>
+                        ) :(
+                            <TableContainer></TableContainer>
+                        )}
+                        <Button variant="contained" 
+                                className={'lw-panel-button'}
+                                color="primary">
+                            Add to catalog
+                        </Button>
+                </div>
+            </ThemeProvider>
         );
     }
 }
