@@ -1,3 +1,9 @@
 .vre-composer {
     display: flex;
 }
+
+.export-btn {
+    position: absolute !important;
+    top: 440px;
+    left: 20px;
+}

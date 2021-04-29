@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { ReactWidget } from '@jupyterlab/apputils';
 import styled from 'styled-components'
+import { theme } from './Theme';
 import { Content, Page, Sidebar, SidebarItem } from './components';
 import { chartSimple } from './exampleChart';
 import { FlowChartWithState, INodeInnerDefaultProps } from '@mrblenny/react-flow-chart';
+import { Button, ThemeProvider } from '@material-ui/core';
 
 const Outer = styled.div`
 padding: 10px;
@@ -12,7 +14,11 @@ width: 100px;
 
 const Message = styled.div`
 padding: 20px;
-background: #ff8c5a;
+color: white;
+font-weight: bold;
+padding: 20px;
+font-size: larger;
+background: #4e79ba;
 `
 
 const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
@@ -26,193 +32,124 @@ const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
 }
 
 const Composer = () => (
+  <ThemeProvider theme={theme}>
     <Page>
-    <Content>
-      <FlowChartWithState 
-        initialValue={chartSimple}
-        Components={{
-          NodeInner: NodeInnerCustom
-      }}
-      />
-    </Content>
-    <Sidebar>
-      <Message>
-        VRE Catalog
-      </Message>
-      <SidebarItem
-        type="Load Point Cloud"
-        ports={ {
-          port1: {
-            id: 'port1',
-            type: 'bottom',
-          },
-        } }
-        properties={ {
-          title: 'Load Point Cloud',
+      <Content>
+        <FlowChartWithState 
+          initialValue={chartSimple}
+          Components={{
+            NodeInner: NodeInnerCustom
         }}
-      />
-      <SidebarItem
-        type="Normalize Point Cloud"
-        ports={ {
-          port1: {
-            id: 'port1',
-            type: 'top',
-          },
-          port2: {
-            id: 'port2',
-            type: 'bottom',
-          }
-        } }
-        properties={ {
-          title: 'Normalize Point Cloud',
-        }}
-      />
-      <SidebarItem
-        type="Polygon"
-        ports={ {
-          port1: {
-            id: 'port1',
-            type: 'bottom',
-          },
-        } }
-        properties={ {
-          title: 'Polygon',
-        }}
-      />
-      <SidebarItem
-        type="Attribute"
-        ports={ {
-          port1: {
-            id: 'port1',
-            type: 'bottom',
-          },
-        } }
-        properties={ {
-          title: 'Attribute',
-        }}
-      />
-      <SidebarItem
-        type="Volume"
-        ports={ {
-          port1: {
-            id: 'port1',
-            type: 'bottom',
-          },
-        } }
-        properties={ {
-          title: 'Volume',
-        }}
-      />
-      <SidebarItem
-        type="Export"
-        ports={ {
-          port1: {
-            id: 'port1',
-            type: 'top',
-          },
-        } }
-        properties={ {
-          title: 'Export',
-        }}
-      />
-      <SidebarItem
-        type="Filter Points by Polygon"
-        ports={ {
-          port1: {
-            id: 'port1',
-            type: 'top',
-          },
-          port2: {
-            id: 'port2',
-            type: 'top',
-          },
-          port3: {
-            id: 'port3',
-            type: 'bottom',
-          }
-        } }
-        properties={ {
-          title: 'Filter Points by Polygon',
-        }}
-      />
-      <SidebarItem
-        type="Filter Points by Attribute"
-        ports={ {
-          port1: {
-            id: 'port1',
-            type: 'top',
-          },
-          port2: {
-            id: 'port2',
-            type: 'top',
-          },
-          port3: {
-            id: 'port3',
-            type: 'bottom',
-          }
-        } }
-        properties={ {
-          title: 'Filter Points by Attribute',
-        }}
-      />
-      <SidebarItem
-        type="Compute Neighboors"
-        ports={ {
-          port1: {
-            id: 'port1',
-            type: 'top',
-          },
-          port2: {
-            id: 'port2',
-            type: 'top',
-          },
-          port3: {
-            id: 'port3',
-            type: 'top',
-          },
-          port4: {
-            id: 'port4',
-            type: 'bottom',
-          },
-          port5: {
-            id: 'port5',
-            type: 'bottom',
-          }
-        } }
-        properties={ {
-          title: 'Compute Neighboors',
-        }}
-      />
-      <SidebarItem
-        type="Compute Features"
-        ports={ {
-          port1: {
-            id: 'port1',
-            type: 'top',
-          },
-          port2: {
-            id: 'port2',
-            type: 'top',
-          },
-          port3: {
-            id: 'port3',
-            type: 'top',
-          },
-          port4: {
-            id: 'port4',
-            type: 'top',
-          },
-          port5: {
-            id: 'port5',
-            type: 'bottom',
-          }
-        } }
-        properties={ {
-          title: 'Compute Features',
-        }}
-      />
-    </Sidebar>
-  </Page>
+        />
+      </Content>
+      <Sidebar>
+        <Message>
+          VRE Catalog
+        </Message>
+        <SidebarItem
+          type="Load as a las file"
+          ports={ {
+            port1: {
+              id: 'port1',
+              type: 'bottom',
+            },
+          } }
+          properties={ {
+            title: 'Load as a las file',
+          }}
+        />
+        <SidebarItem
+          type="Normalize point cloud"
+          ports={ {
+            port1: {
+              id: 'port1',
+              type: 'top',
+            },
+            port2: {
+              id: 'port2',
+              type: 'bottom',
+            }
+          } }
+          properties={ {
+            title: 'Normalize point cloud',
+          }}
+        />
+        <SidebarItem
+          type="Write result to ply file"
+          ports={ {
+            port1: {
+              id: 'port1',
+              type: 'top',
+            },
+          } }
+          properties={ {
+            title: 'Write result to ply file',
+          }}
+        />
+        <SidebarItem
+          type="Filter points by attributed threshold"
+          ports={ {
+            port1: {
+              id: 'port1',
+              type: 'top',
+            },
+            port2: {
+              id: 'port2',
+              type: 'bottom',
+            }
+          } }
+          properties={ {
+            title: 'Filter points by attributed threshold',
+          }}
+        />
+        <SidebarItem
+          type="Compute neighbors"
+          ports={ {
+            port1: {
+              id: 'port1',
+              type: 'top',
+            },
+            port2: {
+              id: 'port2',
+              type: 'top',
+            },
+            port3: {
+              id: 'port3',
+              type: 'bottom',
+            }
+          } }
+          properties={ {
+            title: 'Compute neighbors',
+          }}
+        />
+        <SidebarItem
+          type="Calculate neighbors and selected features"
+          ports={ {
+            port1: {
+              id: 'port1',
+              type: 'top',
+            },
+            port2: {
+              id: 'port2',
+              type: 'top',
+            },
+            port3: {
+              id: 'port3',
+              type: 'bottom',
+            },
+            port4: {
+              id: 'port4',
+              type: 'bottom',
+            }
+          } }
+          properties={ {
+            title: 'Calculate neighbors and selected features',
+          }}
+        />
+      </Sidebar>
+      <Button className={'export-btn'} variant="contained" color="secondary">Export Workflow</Button>
+    </Page>
+  </ThemeProvider>
 );
 
 export class ComposerWidget extends ReactWidget {
