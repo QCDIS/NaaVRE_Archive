@@ -4,9 +4,18 @@ import ast
 
 class Extractor:
 
-    @staticmethod
-    def extract_imports(sources):
+    sources     : []
+    imports     : []
+    undefined   : set
 
+    def __init__(self, notebook):
+        self.sources = [ nbcell.source for nbcell in notebook.cells if nbcell.cell_type == 'code' and len(nbcell.source) > 0]
+        self.imports = self.__extract_imports(self.sources)
+        self.undefined = set()
+        for source in self.sources:
+            self.undefined.update(self.__extract_cell_undefined(source))
+
+    def __extract_imports(self, sources):
         imports = { }
         for s in sources:
             tree = ast.parse(s)
@@ -22,48 +31,41 @@ class Extractor:
                             }
         return imports
 
+    def infere_cell_outputs(self, cell_source):
+        cell_names = self.__extract_cell_names(cell_source)
+        return [name for name in cell_names if name not in self.__extract_cell_undefined(cell_source) \
+                and name not in self.imports and name in self.undefined]
 
-    @staticmethod
-    def extract_names(source):
+    
+    def infere_cell_inputs(self, cell_source):
+        cell_undefined = self.__extract_cell_undefined(cell_source)
+        return [und for und in cell_undefined if und not in self.imports]
+
+
+    def infere_cell_dependencies(self, cell_source):
+        dependencies = []
+        for name in self.__extract_cell_names(cell_source):
+            if name in self.imports:
+                dependencies.append(self.imports.get(name))
+
+
+    def __extract_cell_names(self, cell_source):
         names = set()
-        tree = ast.parse(source)
+        tree = ast.parse(cell_source)
         for module in ast.walk(tree):
             if isinstance(module, (ast.Name,)):
                 names.add(module.id)
         return names
 
 
-    @staticmethod
-    def extract_parameters(source):
-        params = set()
-        tree = ast.parse(source)
-        for module in ast.walk(tree):
-            if isinstance(module, (ast.Call,)):
-                print(module)
-                for arg in module.args:
-                    print(type(arg))
-                for kw in module.keywords:
-                    print(type(kw))
-        return params
-
-
-    @staticmethod
-    def extract_all_undefined(sources):
-        all_undefined = set()
-        for source in sources:
-            all_undefined.update(Extractor.extract_undefined(source))
-        return all_undefined
-
-
-    @staticmethod
-    def extract_undefined(code):
+    def __extract_cell_undefined(self, cell_source):
 
         flakes_stdout = StreamList()
         flakes_stderr = StreamList()
         rep = pyflakes_reporter.Reporter(
             flakes_stdout.reset(),
             flakes_stderr.reset())
-        pyflakes_api.check(code, filename="temp", reporter=rep)
+        pyflakes_api.check(cell_source, filename="temp", reporter=rep)
 
         if rep._stderr():
             raise RuntimeError("Flakes reported the following error:"
@@ -77,6 +79,19 @@ class Extractor:
             var_search = re.search(p, line)
             undef_vars.add(var_search.group(1))
         return undef_vars
+
+    
+    def extract_cell_parameters(self, cell_source):
+        params = set()
+        tree = ast.parse(cell_source)
+        for module in ast.walk(tree):
+            if isinstance(module, (ast.Call,)):
+                print(module)
+                for arg in module.args:
+                    print(type(arg))
+                for kw in module.keywords:
+                    print(type(kw))
+        return params
 
 
 class StreamList:

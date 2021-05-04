@@ -30,27 +30,17 @@ class ExtractorHandler(APIHandler):
         payload = self.get_json_body()
         cell_index = payload['cell_index']
         notebook = nb.reads(json.dumps(payload['notebook']), nb.NO_CONVERT)
-        sources = [ cell.source for cell in notebook.cells if cell.cell_type == 'code' and len(cell.source) > 0]
+        extractor = Extractor(notebook)
 
-        imports = Extractor.extract_imports(sources)
         source = notebook.cells[cell_index].source
-        all_undefined = Extractor.extract_all_undefined(sources)
-        Extractor.extract_parameters(source)
-
-        undefined = [ und for und in Extractor.extract_undefined(source) if und not in imports ]
-        names = Extractor.extract_names(source)
-        clean_names = [ name for name in names if name not in undefined and name not in imports and name in all_undefined]
 		
         title = source.partition('\n')[0]
         title = title.replace('#', '').strip() if title[0] == "#" else "Untitled"
         
-        ins = set(undefined)
-        outs = set(clean_names)
+        ins = set(extractor.infere_cell_inputs(source))
+        outs = set(extractor.infere_cell_outputs(source))
 
-        dependencies = []
-        for n in names:
-            if n in imports:
-                dependencies.append(imports.get(n))
+        dependencies = extractor.infere_cell_dependencies(source)
 
         node_id = str(uuid.uuid4())[:7]
         node = ConverterReactFlowChart.get_node(node_id, title, ins, outs)
@@ -67,21 +57,20 @@ class ExtractorHandler(APIHandler):
         }
 
         cell = Cell(
-            title           = title,
-            source          = source,
-            ins             = ins,
-            outs            = outs,
-            dependencies    = dependencies,
-            chart_obj       = chart
+            title               = title,
+            original_source     = source,
+            inputs              = ins,
+            outputs             = outs,
+            dependencies        = dependencies,
+            chart_obj           = chart,
+            container_source    = ""
         )
 
         TempStorage.set_cell(cell)
-        TempStorage.set_global_imports(imports)
 
         self.write(json.dumps({
             'node_id'   : node_id,
-            'chart'     : chart,
-            'names'     : list(names) 
+            'chart'     : chart
         }))
         
         self.flush()
