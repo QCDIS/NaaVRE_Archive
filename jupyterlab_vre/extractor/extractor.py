@@ -25,13 +25,26 @@ class Extractor:
 
     @staticmethod
     def extract_names(source):
-
         names = set()
         tree = ast.parse(source)
         for module in ast.walk(tree):
             if isinstance(module, (ast.Name,)):
                 names.add(module.id)
         return names
+
+
+    @staticmethod
+    def extract_parameters(source):
+        params = set()
+        tree = ast.parse(source)
+        for module in ast.walk(tree):
+            if isinstance(module, (ast.Call,)):
+                print(module)
+                for arg in module.args:
+                    print(type(arg))
+                for kw in module.keywords:
+                    print(type(kw))
+        return params
 
 
     @staticmethod

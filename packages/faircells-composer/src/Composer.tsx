@@ -4,13 +4,10 @@ import styled from 'styled-components'
 import { theme } from './Theme';
 import { Content, Page, Sidebar, SidebarItem } from './components';
 import { chartSimple } from './exampleChart';
-import { FlowChartWithState, INodeInnerDefaultProps } from '@mrblenny/react-flow-chart';
+import { FlowChartWithState } from '@mrblenny/react-flow-chart';
 import { Button, ThemeProvider } from '@material-ui/core';
+import { NodeInnerCustom } from '@jupyter_vre/chart-customs';
 
-const Outer = styled.div`
-padding: 10px;
-width: 100px;
-`
 
 const Message = styled.div`
 padding: 20px;
@@ -20,16 +17,6 @@ padding: 20px;
 font-size: larger;
 background: #4e79ba;
 `
-
-const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
-
-  return (
-      <Outer>
-          <p>{node.properties.title}</p>
-          <br />
-      </Outer>
-  )
-}
 
 const Composer = () => (
   <ThemeProvider theme={theme}>
@@ -44,7 +31,7 @@ const Composer = () => (
       </Content>
       <Sidebar>
         <Message>
-          VRE Catalog
+          VRE Knowledge Base
         </Message>
         <SidebarItem
           type="Load as a las file"

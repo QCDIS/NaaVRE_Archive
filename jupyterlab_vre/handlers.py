@@ -35,6 +35,7 @@ class ExtractorHandler(APIHandler):
         imports = Extractor.extract_imports(sources)
         source = notebook.cells[cell_index].source
         all_undefined = Extractor.extract_all_undefined(sources)
+        Extractor.extract_parameters(source)
 
         undefined = [ und for und in Extractor.extract_undefined(source) if und not in imports ]
         names = Extractor.extract_names(source)
@@ -79,7 +80,8 @@ class ExtractorHandler(APIHandler):
 
         self.write(json.dumps({
             'node_id'   : node_id,
-            'chart'     : chart
+            'chart'     : chart,
+            'names'     : list(names) 
         }))
         
         self.flush()

@@ -1,8 +1,7 @@
-import { FlowChart, IChart, INodeInnerDefaultProps } from "@mrblenny/react-flow-chart";
+import { FlowChart, IChart } from "@mrblenny/react-flow-chart";
 import { cloneDeep, mapValues } from 'lodash'
 import * as actions from "@mrblenny/react-flow-chart/src/container/actions";
 import * as React from 'react';
-import styled from 'styled-components';
 import { requestAPI } from './FAIRCells-VRE';
 import { INotebookModel, Notebook, NotebookPanel } from '@jupyterlab/notebook';
 import { DocumentRegistry } from '@jupyterlab/docregistry';
@@ -14,21 +13,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { Button, TableBody, ThemeProvider } from "@material-ui/core";
-
-const Outer = styled.div`
-  padding: 10px;
-  width: 100px;
-`
-
-const NodeInnerCustom = ({ node, config }: INodeInnerDefaultProps) => {
-
-    return (
-        <Outer>
-            <p>{node.properties.title}</p>
-            <br />
-        </Outer>
-    )
-}
+import { NodeInnerCustom } from '@jupyter_vre/chart-customs';
 
 const defaultChart: IChart = { 
     offset: {
@@ -78,7 +63,8 @@ export class CellTracker extends React.Component<IProps, IState> {
 
         this.currNodeId = resp['node_id'];
         this.setState(resp['chart']);
-        console.log(resp['chart']);
+        
+        console.log(resp);
     }
 
     addToCatalog = async () => {
@@ -167,7 +153,7 @@ export class CellTracker extends React.Component<IProps, IState> {
                                 chart={this.state}
                                 callbacks={this.stateActions}
                                 Components={{
-                                    NodeInner: NodeInnerCustom
+                                    NodeInner   : NodeInnerCustom
                                 }}
                             />
                         </div>

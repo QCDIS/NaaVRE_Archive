@@ -4,6 +4,7 @@
 
 .export-btn {
     position: absolute !important;
+    width: 215px;
     top: 440px;
     left: 20px;
 }

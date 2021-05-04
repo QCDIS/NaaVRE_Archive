@@ -1,4 +1,5 @@
 import uuid
+from colorhash import ColorHash
 
 class ConverterReactFlowChart:
 
@@ -21,16 +22,27 @@ class ConverterReactFlowChart:
 
         for i in ins:
             ports[i] = {}
+            ports[i]['properties'] = {}
             ports[i]['id'] = i
             ports[i]['type'] = 'input'
-            properties['vars'].append({ 'name': i, 'direction': 'input', 'type': 'datatype' })
+            ports[i]['properties']['color'] = ColorHash(i).hex
+            properties['vars'].append({ 
+                'name'      : i,
+                'direction' : 'input',
+                'type'      : 'datatype'
+            })
 
         for o in outs:
             ports[o] = {}
+            ports[o]['properties'] = {}
             ports[o]['id'] = o
             ports[o]['type'] = 'output'
-            properties['vars'].append({ 'name': o, 'direction': 'output', 'type': 'datatype' })
-
+            ports[o]['properties']['color'] = ColorHash(o).hex
+            properties['vars'].append({ 
+                'name'      : o,
+                'direction' : 'output',
+                'type'      : 'datatype'
+            })
 
         node['ports'] = ports
 
