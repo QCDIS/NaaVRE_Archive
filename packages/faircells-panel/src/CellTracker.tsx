@@ -69,34 +69,20 @@ export class CellTracker extends React.Component<IProps, IState> {
 
     addToCatalog = async () => {
 
-    //     if (!this.state.loading) {
+        if (!this.state.loading) {
 
-    //         console.log('Adding ..')
+            console.log('Adding ..')
 
-    //         this.setState({ loading: true });
-    //         this.setState({ success: false });
-
-    //         await requestAPI<any>('catalog/add', {
-    //             body: JSON.stringify({
-    //                 cell_index: this.state.activeCellIndex
-    //             }),
-    //             method: 'POST'
-    //         });
-
-    //         let outer_this = this
-
-    //         setTimeout(function() {
-    //             outer_this.setState({ loading: false });
-    //             outer_this.setState({ success: true });
-    //         }, 2000);
-
-    //     }
+            await requestAPI<any>('catalog/add', {
+                body: JSON.stringify({
+                    cell_index: this.state.activeCellIndex
+                }),
+                method: 'POST'
+            });
+        }
     }
 
     onActiveCellChanged = (notebook: Notebook, activeCell: Cell) => {
-        // this.setState({
-        //   activeCellIndex: notebook.activeCellIndex,
-        // });
         this.currCellIndex = notebook.activeCellIndex;
         this.apiCall(this.props.notebook.model);
     };
@@ -111,9 +97,6 @@ export class CellTracker extends React.Component<IProps, IState> {
         notebook.context.ready.then(() => {
             this.props.notebook.content.activeCellChanged.connect(this.onActiveCellChanged);
             this.props.notebook.context.saveState.connect(this.handleSaveState);
-            // this.setState({
-            //     activeCellIndex: notebook.content.activeCellIndex,
-            // });
             this.currCellIndex = notebook.content.activeCellIndex
         });
     };
@@ -182,6 +165,7 @@ export class CellTracker extends React.Component<IProps, IState> {
                         )}
                         <Button variant="contained" 
                                 className={'lw-panel-button'}
+                                onClick={this.addToCatalog}
                                 color="primary">
                             Add to catalog
                         </Button>

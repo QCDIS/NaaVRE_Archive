@@ -4,9 +4,9 @@ class Cell:
 
     title               : str
     original_source     : str
-    inputs              : set
-    outputs             : set
-    dependencies        : set
+    inputs              : list
+    outputs             : list
+    dependencies        : list
     chart_obj           : dict
     container_source    : str
 
@@ -23,8 +23,8 @@ class Cell:
         
         self.title              = title
         self.original_source    = original_source
-        self.inputs             = inputs
-        self.outputs            = outputs
+        self.inputs             = list(inputs)
+        self.outputs            = list(outputs)
         self.depedencies        = dependencies
         self.chart_obj          = chart_obj
         self.container_source   = container_source

@@ -1,3 +1,4 @@
+import copy
 import json
 import uuid
 import nbformat as nb
@@ -6,7 +7,8 @@ from notebook.base.handlers import APIHandler
 from tornado import web
 from jupyterlab_vre.extractor.extractor import Extractor
 from jupyterlab_vre.converter.converter import ConverterReactFlowChart
-from jupyterlab_vre.storage.storage import Cell, TempStorage
+from jupyterlab_vre.storage.storage import Cell
+from jupyterlab_vre.storage.catalog import Catalog
 from jinja2 import Environment, PackageLoader, FileSystemLoader
 
 
@@ -16,7 +18,7 @@ from jinja2 import Environment, PackageLoader, FileSystemLoader
 
 ################################################################################
 
-class ExtractorHandler(APIHandler):
+class ExtractorHandler(APIHandler, Catalog):
 
     @web.authenticated
     async def get(self):
@@ -66,11 +68,12 @@ class ExtractorHandler(APIHandler):
             container_source    = ""
         )
 
-        TempStorage.set_cell(cell)
+        Catalog.editor_buffer = copy.deepcopy(cell)
 
         self.write(json.dumps({
             'node_id'   : node_id,
-            'chart'     : chart
+            'chart'     : chart,
+            'deps'      : dependencies
         }))
         
         self.flush()
@@ -82,7 +85,7 @@ class ExtractorHandler(APIHandler):
 
 ################################################################################
 
-class CatalogAddHandler(APIHandler):
+class CatalogAddHandler(APIHandler, Catalog):
 
     @web.authenticated
     async def get(self):
@@ -93,10 +96,12 @@ class CatalogAddHandler(APIHandler):
 
     @web.authenticated
     async def post(self, *args, **kwargs):
-        current_cell = TempStorage.get_cell()
+        current_cell = Catalog.editor_buffer
+        print(json.dumps(current_cell.__dict__))
         deps = current_cell.compile_dependencies()
-        loader = PackageLoader('FAIRCells_VRE', 'templates')
+        loader = PackageLoader('jupyterlab_vre', 'templates')
         template_env = Environment(loader=loader)
+        print(template_env.list_templates())
         template = template_env.get_template('cell_template.jinja2')
         compiled_code = template.render(cell=current_cell, deps=deps)
         compiled_code = autopep8.fix_code(compiled_code)
