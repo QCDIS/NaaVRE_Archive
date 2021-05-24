@@ -97,14 +97,14 @@ class CatalogAddHandler(APIHandler, Catalog):
     @web.authenticated
     async def post(self, *args, **kwargs):
         current_cell = Catalog.editor_buffer
-        print(json.dumps(current_cell.__dict__))
         deps = current_cell.compile_dependencies()
         loader = PackageLoader('jupyterlab_vre', 'templates')
         template_env = Environment(loader=loader)
-        print(template_env.list_templates())
         template = template_env.get_template('cell_template.jinja2')
         compiled_code = template.render(cell=current_cell, deps=deps)
         compiled_code = autopep8.fix_code(compiled_code)
+        current_cell.container_source = compiled_code
+        Catalog.add_cell(current_cell)
         
 
 

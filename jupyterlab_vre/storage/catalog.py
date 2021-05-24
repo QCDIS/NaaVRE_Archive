@@ -10,4 +10,5 @@ class Catalog:
 
     @classmethod
     def add_cell(cls, cell: Cell):
-        cls.db.insert(json.dumps(cell.__dict__))
+        print(json.dumps(cell.__dict__))
+        cls.db.insert(cell.__dict__)

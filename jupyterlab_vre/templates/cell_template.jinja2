@@ -3,16 +3,16 @@
 {{ d }}
 {%- endfor %}
 {% endif %}
-{%- if cell.ins|length > 0 %}
+{%- if cell.inputs|length > 0 %}
 from VRE import datastore
 datastore.set_data_dir("{{ data_dir }}")
-{% for in_var in cell.ins|sort %}
+{% for in_var in cell.inputs|sort %}
 {{ in_var }} = datastore.load("{{ in_var }}")
 {%- endfor %}
 {% endif %}
-{{ cell.source }}
-{%- if cell.outs|length > 0 %}
-{% for out_var in cell.outs|sort %}
+{{ cell.original_source }}
+{%- if cell.outputs|length > 0 %}
+{% for out_var in cell.outputs|sort %}
 {{ out_var }} = datastore.save("{{ out_var }}")
 {%- endfor %}
 {% endif %}
