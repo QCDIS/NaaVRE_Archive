@@ -6,6 +6,7 @@ class Cell:
     original_source     : str
     inputs              : list
     outputs             : list
+    params              : list
     dependencies        : list
     chart_obj           : dict
     container_source    : str
@@ -16,6 +17,7 @@ class Cell:
         original_source,
         inputs,
         outputs,
+        params,
         dependencies,
         chart_obj,
         container_source
@@ -25,6 +27,7 @@ class Cell:
         self.original_source    = original_source
         self.inputs             = list(inputs)
         self.outputs            = list(outputs)
+        self.params             = list(params)
         self.depedencies        = dependencies
         self.chart_obj          = chart_obj
         self.container_source   = container_source

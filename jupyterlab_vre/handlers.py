@@ -41,11 +41,20 @@ class ExtractorHandler(APIHandler, Catalog):
         
         ins = set(extractor.infere_cell_inputs(source))
         outs = set(extractor.infere_cell_outputs(source))
+        params = extractor.extract_cell_parameters(source)
 
         dependencies = extractor.infere_cell_dependencies(source)
 
         node_id = str(uuid.uuid4())[:7]
-        node = ConverterReactFlowChart.get_node(node_id, title, ins, outs)
+        node = ConverterReactFlowChart.get_node(
+            node_id, 
+            title, 
+            ins, 
+            outs, 
+            params, 
+            dependencies
+        )
+
         chart = {
             'offset': {
                 'x': 0,
@@ -63,6 +72,7 @@ class ExtractorHandler(APIHandler, Catalog):
             original_source     = source,
             inputs              = ins,
             outputs             = outs,
+            params              = params,
             dependencies        = dependencies,
             chart_obj           = chart,
             container_source    = ""

@@ -141,6 +141,8 @@ export class CellTracker extends React.Component<IProps, IState> {
                             />
                         </div>
                         {this.currNodeId ? (
+                            <div>
+                            <p className={'lw-panel-preview'}>Inputs and Outputs</p>
                             <TableContainer component={Paper} className={'lw-panel-table'}>
                                 <Table aria-label="simple table">
                                     <TableBody>
@@ -152,14 +154,40 @@ export class CellTracker extends React.Component<IProps, IState> {
                                             <TableCell component="th" scope="row">
                                                 {variable.direction}
                                             </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                                </Table>
+                            </TableContainer>
+                            <p className={'lw-panel-preview'}>Parameters</p>
+                            <TableContainer component={Paper} className={'lw-panel-table'}>
+                                <Table aria-label="simple table">
+                                    <TableBody>
+                                    {this.state.nodes[this.currNodeId].properties['params'].map((param: any) => (
+                                        <TableRow key={param}>
                                             <TableCell component="th" scope="row">
-                                                {variable.datatype}
+                                                {param}
                                             </TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
                                 </Table>
                             </TableContainer>
+                            <p className={'lw-panel-preview'}>Dependencies</p>
+                            <TableContainer component={Paper} className={'lw-panel-table'}>
+                                <Table aria-label="simple table">
+                                    <TableBody>
+                                    {this.state.nodes[this.currNodeId].properties['deps'].map((dep: any) => (
+                                        <TableRow key={dep}>
+                                            <TableCell component="th" scope="row">
+                                                {dep}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                                </Table>
+                            </TableContainer>
+                            </div>
                         ) :(
                             <TableContainer></TableContainer>
                         )}
