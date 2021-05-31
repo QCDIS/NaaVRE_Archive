@@ -64,7 +64,7 @@ export class VREPanel extends React.Component<IProps> {
                             </div>
                             <Divider />
                         </div>
-                        <div style={{ marginTop: 30 }}>
+                        <div style={{ marginTop: 5 }}>
                             <CellTracker
                                 notebook={this.getActiveNotebook()}
                             />

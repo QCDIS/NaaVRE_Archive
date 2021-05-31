@@ -57,7 +57,7 @@ class ExtractorHandler(APIHandler, Catalog):
 
         chart = {
             'offset': {
-                'x': 0,
+                'x': -100,
                 'y': 0,
             },
             'scale': 1,
@@ -114,7 +114,7 @@ class CatalogAddHandler(APIHandler, Catalog):
         compiled_code = template.render(cell=current_cell, deps=deps)
         compiled_code = autopep8.fix_code(compiled_code)
         current_cell.container_source = compiled_code
-        Catalog.add_cell(current_cell)
+        # Catalog.add_cell(current_cell)
         
 
 

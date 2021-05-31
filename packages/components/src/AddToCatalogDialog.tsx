@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { ReactWidget, Dialog } from '@jupyterlab/apputils';
+import { LinearProgress } from '@material-ui/core';
 
 class AddToCatalogDialogBody extends ReactWidget implements Dialog.IBodyWidget {
 
@@ -13,7 +14,10 @@ class AddToCatalogDialogBody extends ReactWidget implements Dialog.IBodyWidget {
 
     render() {
         return (
-            <h4>Cell Added to the local catalog</h4>
+            <div>
+                <p className={'add-catalog-label'}>Adding cell to the catalog ..</p>
+                <LinearProgress className={'add-catalog-progress'}/>
+            </div>
         );
     }
 

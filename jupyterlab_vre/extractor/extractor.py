@@ -83,19 +83,19 @@ class Extractor:
 
     
     def extract_cell_parameters(self, cell_source):
-        names = self.__extract_cell_names(cell_source)
         params = []
+        const_assign = []
         tree = ast.parse(cell_source)
         for module in ast.walk(tree):
+            if isinstance(module, ast.Assign) and type(module.value) is ast.Constant:
+                    const_assign.append(module.targets[0].id)
             if isinstance(module, (ast.Call,)):
                 for arg in module.args:
-                    print(type(arg))
-                    if isinstance(arg, ast.Name):
-                        params.append(arg.id)
+                    if isinstance(arg, ast.Name) and arg.id in const_assign:
+                            params.append(arg.id)
                 for kw in module.keywords:
-                    print(type(kw))
                     params.append(kw.arg)
-        return set(params).difference(names)
+        return set(params)
 
 
 class StreamList:
