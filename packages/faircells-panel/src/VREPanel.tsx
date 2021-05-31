@@ -54,7 +54,7 @@ export class VREPanel extends React.Component<IProps> {
                     <div className={'lifewatch-widget-content'}>
                         <div>
                             <p className={'lw-panel-header'}>
-                                FAIR Cells Panel
+                                Component containerizer
                             </p>
                             <Divider />
                             <div>

@@ -4,8 +4,8 @@ import * as React from 'react';
 
 
 const PortDefaultOuter = styled.div`
-  width: 24px;
-  height: 24px;
+  width: 18px;
+  height: 18px;
   background: ${(props: { color: any; }) => props.color};
   border-radius: 50%;
   cursor: pointer;

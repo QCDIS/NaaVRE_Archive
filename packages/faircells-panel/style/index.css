@@ -45,7 +45,6 @@
     width: 350px;
     height: 200px;
     overflow: hidden;
-    padding: 20px;
 }
 
 .lw-panel-editor-container {
@@ -55,7 +54,7 @@
 }
 
 .lw-panel-table {
-    width: 350px !important;
+    width: 310px !important;
     margin: 20px 0px 0px 20px;
 }
 

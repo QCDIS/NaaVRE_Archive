@@ -89,9 +89,11 @@ class Extractor:
         for module in ast.walk(tree):
             if isinstance(module, (ast.Call,)):
                 for arg in module.args:
+                    print(type(arg))
                     if isinstance(arg, ast.Name):
                         params.append(arg.id)
                 for kw in module.keywords:
+                    print(type(kw))
                     params.append(kw.arg)
         return set(params).difference(names)
 

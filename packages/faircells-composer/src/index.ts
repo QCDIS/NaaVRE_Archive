@@ -24,12 +24,12 @@ const extension: JupyterFrontEndPlugin<void> = {
         const command = CommandIDs.create;
         commands.addCommand(command, {
             caption: 'Launch Workflow Composition',
-            label: 'Workflow Composition',
+            label: 'Experiment Manager',
             icon: args => (args['isPalette'] ? null : buildIcon),
             execute: () => {
               const content = new ComposerWidget();
               const widget = new MainAreaWidget<ComposerWidget>({ content });
-              widget.title.label = 'Workflow Composition';
+              widget.title.label = 'Experiment Manager';
               widget.title.icon = buildIcon;
               app.shell.add(widget, 'main');
             }

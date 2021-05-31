@@ -13,7 +13,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { Button, TableBody, ThemeProvider } from "@material-ui/core";
-import { NodeInnerCustom } from '@jupyter_vre/chart-customs';
+import { NodeInnerCustom, PortCustom } from '@jupyter_vre/chart-customs';
+import { showAddToCatalogDialog } from '@jupyter_vre/components';
 
 const defaultChart: IChart = { 
     offset: {
@@ -72,13 +73,15 @@ export class CellTracker extends React.Component<IProps, IState> {
         if (!this.state.loading) {
 
             console.log('Adding ..')
-
-            await requestAPI<any>('catalog/add', {
-                body: JSON.stringify({
-                    cell_index: this.state.activeCellIndex
-                }),
-                method: 'POST'
-            });
+            showAddToCatalogDialog().then((result: any) => {
+                console.log(result);
+            })
+            // await requestAPI<any>('catalog/add', {
+            //     body: JSON.stringify({
+            //         cell_index: this.state.activeCellIndex
+            //     }),
+            //     method: 'POST'
+            // });
         }
     }
 
@@ -130,73 +133,73 @@ export class CellTracker extends React.Component<IProps, IState> {
         return (
             <ThemeProvider theme={theme}>
                 <div>
-                    <p className={'lw-panel-preview'}>Node Preview: </p>
-                        <div className={'lw-panel-editor'}>
-                            <FlowChart
-                                chart={this.state}
-                                callbacks={this.stateActions}
-                                Components={{
-                                    NodeInner   : NodeInnerCustom
-                                }}
-                            />
+                    <div className={'lw-panel-editor'}>
+                        <FlowChart
+                            chart={this.state}
+                            callbacks={this.stateActions}
+                            Components={{
+                                NodeInner   : NodeInnerCustom,
+                                Port        : PortCustom
+                            }}
+                        />
+                    </div>
+                    {this.currNodeId ? (
+                        <div>
+                        <p className={'lw-panel-preview'}>Inputs and Outputs</p>
+                        <TableContainer component={Paper} className={'lw-panel-table'}>
+                            <Table aria-label="simple table">
+                                <TableBody>
+                                {this.state.nodes[this.currNodeId].properties['vars'].map((variable: any) => (
+                                    <TableRow key={variable.name}>
+                                        <TableCell component="th" scope="row">
+                                            <p style={{color: variable.color, fontSize: "1em"}}>{variable.name}</p>
+                                        </TableCell>
+                                        <TableCell component="th" scope="row">
+                                            {variable.direction}
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                            </Table>
+                        </TableContainer>
+                        <p className={'lw-panel-preview'}>Parameters</p>
+                        <TableContainer component={Paper} className={'lw-panel-table'}>
+                            <Table aria-label="simple table">
+                                <TableBody>
+                                {this.state.nodes[this.currNodeId].properties['params'].map((param: any) => (
+                                    <TableRow key={param}>
+                                        <TableCell component="th" scope="row">
+                                            {param}
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                            </Table>
+                        </TableContainer>
+                        <p className={'lw-panel-preview'}>Dependencies</p>
+                        <TableContainer component={Paper} className={'lw-panel-table'}>
+                            <Table aria-label="simple table">
+                                <TableBody>
+                                {this.state.nodes[this.currNodeId].properties['deps'].map((dep: any) => (
+                                    <TableRow key={dep}>
+                                        <TableCell component="th" scope="row">
+                                            {dep}
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                            </Table>
+                        </TableContainer>
                         </div>
-                        {this.currNodeId ? (
-                            <div>
-                            <p className={'lw-panel-preview'}>Inputs and Outputs</p>
-                            <TableContainer component={Paper} className={'lw-panel-table'}>
-                                <Table aria-label="simple table">
-                                    <TableBody>
-                                    {this.state.nodes[this.currNodeId].properties['vars'].map((variable: any) => (
-                                        <TableRow key={variable.name}>
-                                            <TableCell component="th" scope="row">
-                                                {variable.name}
-                                            </TableCell>
-                                            <TableCell component="th" scope="row">
-                                                {variable.direction}
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                                </Table>
-                            </TableContainer>
-                            <p className={'lw-panel-preview'}>Parameters</p>
-                            <TableContainer component={Paper} className={'lw-panel-table'}>
-                                <Table aria-label="simple table">
-                                    <TableBody>
-                                    {this.state.nodes[this.currNodeId].properties['params'].map((param: any) => (
-                                        <TableRow key={param}>
-                                            <TableCell component="th" scope="row">
-                                                {param}
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                                </Table>
-                            </TableContainer>
-                            <p className={'lw-panel-preview'}>Dependencies</p>
-                            <TableContainer component={Paper} className={'lw-panel-table'}>
-                                <Table aria-label="simple table">
-                                    <TableBody>
-                                    {this.state.nodes[this.currNodeId].properties['deps'].map((dep: any) => (
-                                        <TableRow key={dep}>
-                                            <TableCell component="th" scope="row">
-                                                {dep}
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                                </Table>
-                            </TableContainer>
-                            </div>
-                        ) :(
-                            <TableContainer></TableContainer>
-                        )}
-                        <Button variant="contained" 
-                                className={'lw-panel-button'}
-                                onClick={this.addToCatalog}
-                                color="primary">
-                            Add to catalog
-                        </Button>
+                    ) :(
+                        <TableContainer></TableContainer>
+                    )}
+                    <Button variant="contained" 
+                            className={'lw-panel-button'}
+                            onClick={this.addToCatalog}
+                            color="primary">
+                        Add to catalog
+                    </Button>
                 </div>
             </ThemeProvider>
         );

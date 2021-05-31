@@ -25,7 +25,7 @@ const Composer = () => (
         <FlowChartWithState 
           initialValue={chartSimple}
           Components={{
-            NodeInner: NodeInnerCustom
+            NodeInner : NodeInnerCustom
         }}
         />
       </Content>

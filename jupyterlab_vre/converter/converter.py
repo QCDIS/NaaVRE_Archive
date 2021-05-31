@@ -31,7 +31,8 @@ class ConverterReactFlowChart:
             properties['vars'].append({ 
                 'name'      : i,
                 'direction' : 'input',
-                'type'      : 'datatype'
+                'type'      : 'datatype',
+                'color'     : ports[i]['properties']['color']
             })
 
         for o in outs:
@@ -43,13 +44,14 @@ class ConverterReactFlowChart:
             properties['vars'].append({ 
                 'name'      : o,
                 'direction' : 'output',
-                'type'      : 'datatype'
+                'type'      : 'datatype',
+                'color'     : ports[o]['properties']['color']
             })
 
         node['ports'] = ports
 
         for dep in deps:
-            properties['deps'].append(dep['module'])
+            properties['deps'].append(dep['module'].split('.')[0])
 
         properties['deps'] = list(set(properties['deps']))
 
