@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from glob import glob
 import setuptools
 
 HERE = Path(__file__).parent.resolve()
@@ -10,11 +11,12 @@ labext_name = "jupyterlab_vre"
 long_description = (HERE / "README.md").read_text()
 pkg_json = json.loads((HERE / "package.json").read_bytes())
 frontend_packages_path = "./dist/*.tgz"
+jupyter_config_path = './jupyter-config/*.json'
 
 setup_args = dict(
     name=name,
     version="1.0.0",
-    url="https://github.com/github_username/jupyterlab_vre",
+    url="https://github.com/r-whites/jupyterlab_vre",
     author="Riccardo Bianchi",
     author_email="riccardo.bianchi@lifewatch.eu",
     description="Jupyter Lab extension for virtual research environments",
@@ -22,8 +24,16 @@ setup_args = dict(
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=setuptools.find_packages(),
+    data_files=[('etc/jupyter/jupyter_server_config.d', glob(jupyter_config_path)),
+                ('share/jupyter/lab/extensions', glob(frontend_packages_path))],
     install_requires=[
         "jupyterlab~=3.0",
+        "autopep8",
+        "pyflakes",
+        "nbformat",
+        "jinja2",
+        "colorhash",
+        "tinydb"
     ],
     zip_safe=False,
     include_package_data=True,

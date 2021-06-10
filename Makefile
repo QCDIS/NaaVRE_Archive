@@ -26,3 +26,33 @@ build-frontend: jlpm-install
 
 jlpm-install: 
 	jlpm
+
+dist-ui: build-frontend
+	mkdir -p dist
+	$(call PACKAGE_LAB_EXTENSION,chart-customs)
+	$(call PACKAGE_LAB_EXTENSION,components)
+	$(call PACKAGE_LAB_EXTENSION,faircells-composer)
+	$(call PACKAGE_LAB_EXTENSION,faircells-panel)
+
+release: dist-ui build-backend
+	
+
+define UNLINK_LAB_EXTENSION
+	- jupyter labextension unlink --no-build $1
+endef
+
+define LINK_LAB_EXTENSION
+	cd packages/$1 && jupyter labextension link --no-build .
+endef
+
+define UNINSTALL_LAB_EXTENSION
+	- jupyter labextension uninstall --no-build $1
+endef
+
+define INSTALL_LAB_EXTENSION
+	cd packages/$1 && jupyter labextension install --no-build .
+endef
+
+define PACKAGE_LAB_EXTENSION
+	export PATH=$$(pwd)/node_modules/.bin:$$PATH && cd packages/$1 && npm run dist && mv *.tgz ../../dist
+endef
