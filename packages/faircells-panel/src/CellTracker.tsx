@@ -2,7 +2,7 @@ import { FlowChart, IChart } from "@mrblenny/react-flow-chart";
 import { cloneDeep, mapValues } from 'lodash'
 import * as actions from "@mrblenny/react-flow-chart/src/container/actions";
 import * as React from 'react';
-import { requestAPI } from './FAIRCells-VRE';
+import { requestAPI } from '@jupyter_vre/core';
 import { INotebookModel, Notebook, NotebookPanel } from '@jupyterlab/notebook';
 import { DocumentRegistry } from '@jupyterlab/docregistry';
 import { Cell } from '@jupyterlab/cells';
@@ -12,9 +12,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { Button, TableBody, ThemeProvider } from "@material-ui/core";
+import { TableBody, ThemeProvider } from "@material-ui/core";
 import { NodeInnerCustom, PortCustom } from '@jupyter_vre/chart-customs';
-import { showAddToCatalogDialog } from '@jupyter_vre/components';
 
 const defaultChart: IChart = { 
     offset: {
@@ -35,8 +34,6 @@ interface IProps {
 interface IState {
     activeCellIndex : number,
     chart           : IChart,
-    loading         : boolean,
-    success         : boolean    
 }
 
 
@@ -44,14 +41,14 @@ type SaveState = 'started' | 'completed' | 'failed';
 
 export class CellTracker extends React.Component<IProps, IState> {
 
-    state = cloneDeep(defaultChart)
-    currCellIndex = 0
+    state = cloneDeep(defaultChart);
+    currCellIndex = 0;
     currNodeId: string = null;
 
     stateActions = mapValues(actions, (func: any) =>
         (...args: any) => this.setState(func(...args))) as typeof actions
 
-    apiCall = async (notebookModel: INotebookModel, save = false) => {
+    exctractor = async (notebookModel: INotebookModel, save = false) => {
             
         const resp = await requestAPI<any>('extractor', {
             body: JSON.stringify({
@@ -68,31 +65,14 @@ export class CellTracker extends React.Component<IProps, IState> {
         console.log(resp);
     }
 
-    addToCatalog = async () => {
-
-        if (!this.state.loading) {
-
-            console.log('Adding ..')
-            showAddToCatalogDialog().then((result: any) => {
-                console.log(result);
-            })
-            // await requestAPI<any>('catalog/add', {
-            //     body: JSON.stringify({
-            //         cell_index: this.state.activeCellIndex
-            //     }),
-            //     method: 'POST'
-            // });
-        }
-    }
-
     onActiveCellChanged = (notebook: Notebook, activeCell: Cell) => {
         this.currCellIndex = notebook.activeCellIndex;
-        this.apiCall(this.props.notebook.model);
+        this.exctractor(this.props.notebook.model);
     };
 
     handleSaveState = (context: DocumentRegistry.Context, state: SaveState) => {
         if (state === 'completed') {
-            this.apiCall(this.props.notebook.model);
+            this.exctractor(this.props.notebook.model);
         }
     };
 
@@ -194,13 +174,7 @@ export class CellTracker extends React.Component<IProps, IState> {
                     ) :(
                         <TableContainer></TableContainer>
                     )}
-                    <Button variant="contained" 
-                            className={'lw-panel-button'}
-                            onClick={this.addToCatalog}
-                            color="primary">
-                        Add to catalog
-                    </Button>
-                </div>
+                    </div>
             </ThemeProvider>
         );
     }

@@ -4,7 +4,8 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import { JupyterFrontEnd } from '@jupyterlab/application';
 import { INotebookTracker, NotebookPanel } from '@jupyterlab/notebook';
 import { CellTracker } from './CellTracker'
-import { Divider } from '@material-ui/core';
+import { Button, CircularProgress, Divider } from '@material-ui/core';
+import { requestAPI } from '@jupyter_vre/core';
 
 interface IProps {
     lab: JupyterFrontEnd;
@@ -12,11 +13,13 @@ interface IProps {
 }
 
 interface IState {
-    notebook_path: string
+    notebook_path   : string
+    loading         : boolean
 }
 
 export const DefaultState: IState = {
-    notebook_path: ''
+    notebook_path   : '',
+    loading         : false
 }
 
 export class VREPanel extends React.Component<IProps> {
@@ -47,6 +50,23 @@ export class VREPanel extends React.Component<IProps> {
         console.log('Component updated');
     }
 
+    addToCatalog = async () => {
+
+        if (!this.state.loading) {
+
+            this.setState({ loading: true });
+
+            await requestAPI<any>('catalog/add', {
+                body: JSON.stringify({}),
+                method: 'POST'
+            });
+
+            setTimeout(() => {
+                this.setState({ loading: false });
+            }, 1500);
+        }
+    }
+
     render() {
         return (
             <ThemeProvider theme={theme}>
@@ -68,6 +88,19 @@ export class VREPanel extends React.Component<IProps> {
                             <CellTracker
                                 notebook={this.getActiveNotebook()}
                             />
+                            <div>
+                                <Button variant="contained" 
+                                    className={'lw-panel-button'}
+                                    onClick={this.addToCatalog}
+                                    color="primary">
+                                Add to catalog
+                                </Button>
+                                {this.state.loading ? (
+                                    <span>
+                                        <CircularProgress className={'add-catalog-progress'} size={30}/>
+                                    </span>
+                                ) :(<span></span>)}
+                            </div>
                         </div>
                     </div>
                 </div>

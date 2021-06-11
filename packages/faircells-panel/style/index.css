@@ -75,3 +75,8 @@
 .lw-panel-button {
     margin: 10px !important;
 }
+
+.add-catalog-progress {
+    margin-bottom: -10px;
+    margin-left: 10px;
+}

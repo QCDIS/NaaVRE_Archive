@@ -114,7 +114,9 @@ class CatalogAddHandler(APIHandler, Catalog):
         compiled_code = template.render(cell=current_cell, deps=deps)
         compiled_code = autopep8.fix_code(compiled_code)
         current_cell.container_source = compiled_code
-        # Catalog.add_cell(current_cell)
+        Catalog.add_cell(current_cell)
+        self.flush()
+        
         
 
 
