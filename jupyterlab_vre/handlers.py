@@ -117,13 +117,12 @@ class CatalogAddHandler(APIHandler, Catalog):
         Catalog.add_cell(current_cell)
         self.flush()
         
-        
 
-
-class CatalogGetAllHandler(APIHandler):
+class CatalogGetAllHandler(APIHandler, Catalog):
 
     @web.authenticated
     async def get(self):
+        self.write(json.dumps(Catalog.get_all()))
         self.flush()
 
 

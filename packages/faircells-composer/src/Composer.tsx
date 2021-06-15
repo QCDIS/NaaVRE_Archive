@@ -6,7 +6,8 @@ import { Content, Page, Sidebar, SidebarItem } from './components';
 import { chartSimple } from './exampleChart';
 import { FlowChartWithState } from '@mrblenny/react-flow-chart';
 import { Button, ThemeProvider } from '@material-ui/core';
-import { NodeInnerCustom } from '@jupyter_vre/chart-customs';
+import { NodeInnerCustom, PortCustom } from '@jupyter_vre/chart-customs';
+import { requestAPI } from '@jupyter_vre/core';
 
 
 const Message = styled.div`
@@ -18,135 +19,88 @@ font-size: larger;
 background: #4e79ba;
 `
 
-const Composer = () => (
-  <ThemeProvider theme={theme}>
-    <Page>
-      <Content>
-        <FlowChartWithState 
-          initialValue={chartSimple}
-          Components={{
-            NodeInner : NodeInnerCustom
-        }}
-        />
-      </Content>
-      <Sidebar>
-        <Message>
-          VRE Knowledge Base
-        </Message>
-        <SidebarItem
-          type="Load as a las file"
-          ports={ {
-            port1: {
-              id: 'port1',
-              type: 'bottom',
-            },
-          } }
-          properties={ {
-            title: 'Load as a las file',
-          }}
-        />
-        <SidebarItem
-          type="Normalize point cloud"
-          ports={ {
-            port1: {
-              id: 'port1',
-              type: 'top',
-            },
-            port2: {
-              id: 'port2',
-              type: 'bottom',
-            }
-          } }
-          properties={ {
-            title: 'Normalize point cloud',
-          }}
-        />
-        <SidebarItem
-          type="Write result to ply file"
-          ports={ {
-            port1: {
-              id: 'port1',
-              type: 'top',
-            },
-          } }
-          properties={ {
-            title: 'Write result to ply file',
-          }}
-        />
-        <SidebarItem
-          type="Filter points by attributed threshold"
-          ports={ {
-            port1: {
-              id: 'port1',
-              type: 'top',
-            },
-            port2: {
-              id: 'port2',
-              type: 'bottom',
-            }
-          } }
-          properties={ {
-            title: 'Filter points by attributed threshold',
-          }}
-        />
-        <SidebarItem
-          type="Compute neighbors"
-          ports={ {
-            port1: {
-              id: 'port1',
-              type: 'top',
-            },
-            port2: {
-              id: 'port2',
-              type: 'top',
-            },
-            port3: {
-              id: 'port3',
-              type: 'bottom',
-            }
-          } }
-          properties={ {
-            title: 'Compute neighbors',
-          }}
-        />
-        <SidebarItem
-          type="Calculate neighbors and selected features"
-          ports={ {
-            port1: {
-              id: 'port1',
-              type: 'top',
-            },
-            port2: {
-              id: 'port2',
-              type: 'top',
-            },
-            port3: {
-              id: 'port3',
-              type: 'bottom',
-            },
-            port4: {
-              id: 'port4',
-              type: 'bottom',
-            }
-          } }
-          properties={ {
-            title: 'Calculate neighbors and selected features',
-          }}
-        />
-      </Sidebar>
-      <Button className={'export-btn'} variant="contained" color="secondary">Export Workflow</Button>
-    </Page>
-  </ThemeProvider>
-);
+interface IProps {  }
+
+interface IState {
+	catalog_elements: []
+}
+
+export const DefaultState: IState = {
+	catalog_elements: []
+}
+
+class Composer extends React.Component<IProps, IState> {
+
+	state = DefaultState
+
+	constructor(props: IProps) {
+		super(props);
+		this.getCatalog();
+	}
+
+	getCatalog = async () => {
+
+		const resp = await requestAPI<any>('catalog/all', {
+		  method: 'GET'
+		});
+		
+		this.setState({ catalog_elements: resp });
+	}
+
+	render() {
+		return (
+			<ThemeProvider theme={theme} >
+				<Page>
+					<Content>
+						<FlowChartWithState 
+						initialValue={chartSimple}
+						Components={{
+							NodeInner	: NodeInnerCustom,
+							Port		: PortCustom
+						}}
+						/>
+					</Content>
+				</Page>
+			<Sidebar>
+				<Message>
+					Local Catalog
+				</Message>
+				<div className={'sidebar-items-container'}>
+					{this.state.catalog_elements.map((value, index) => {
+						let nodes = value['chart_obj']['nodes']
+						let element = nodes[Object.keys(nodes)[0]]
+						console.log(element)
+						return (
+							<SidebarItem
+								type={element['type']}
+								ports={element['ports']}
+								properties={element['properties']}
+							/>
+						)
+					})}
+				</div>
+			</Sidebar>
+			<Button className={'export-btn'} 
+				variant="contained"
+				onClick={this.getCatalog}
+				color="secondary">
+				Export Workflow
+			</Button>
+			</ThemeProvider>
+			)
+	}
+}
 
 export class ComposerWidget extends ReactWidget {
 
-    constructor() {
-        super();
-        this.addClass('vre-composer');
-    }
+  constructor() {
+      super();
+      this.addClass('vre-composer');
+  }
 
-    render(): JSX.Element {
-        return <Composer />;
-    }
+  render(): JSX.Element {
+      return (
+        <Composer />
+      );
+  }
 }

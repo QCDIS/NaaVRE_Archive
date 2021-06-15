@@ -8,3 +8,8 @@
     top: 440px;
     left: 20px;
 }
+
+.sidebar-items-container {
+    overflow: scroll;
+    max-height: 350px;
+}

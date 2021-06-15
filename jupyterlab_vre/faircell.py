@@ -1,4 +1,4 @@
-from hashlib import md5
+import hashlib
 
 class Cell:
 
@@ -10,6 +10,7 @@ class Cell:
     dependencies        : list
     chart_obj           : dict
     container_source    : str
+    cell_hash           : int
 
     def __init__(
         self,
@@ -31,6 +32,7 @@ class Cell:
         self.depedencies        = dependencies
         self.chart_obj          = chart_obj
         self.container_source   = container_source
+        self.cell_hash          = int(hashlib.sha1(original_source.encode('utf-8')).hexdigest(), 16)
 
     def compile_dependencies(self):
         resolves = []

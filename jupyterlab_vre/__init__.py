@@ -14,7 +14,8 @@ def load_jupyter_server_extension(lab_app):
 
     lab_app.web_app.add_handlers(host_pattern, [
         (url_path_join(lab_app.web_app.settings['base_url'], r'/vre/extractor'), ExtractorHandler),
-        (url_path_join(lab_app.web_app.settings['base_url'], r'/vre/catalog/add'), CatalogAddHandler)
+        (url_path_join(lab_app.web_app.settings['base_url'], r'/vre/catalog/add'), CatalogAddHandler),
+        (url_path_join(lab_app.web_app.settings['base_url'], r'/vre/catalog/all'), CatalogGetAllHandler)
     ])
     
     lab_app.log.info("Registered FAIR-Cells extension at URL path /vre")

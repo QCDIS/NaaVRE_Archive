@@ -24,7 +24,7 @@ export const SidebarItem = ({ type, ports, properties }: ISidebarItemProps) => {
         event.dataTransfer.setData(REACT_FLOW_CHART, JSON.stringify({ type, ports, properties }))
       } }
     >
-      {type}
+      {properties['title']}
     </Outer>
   )
 }

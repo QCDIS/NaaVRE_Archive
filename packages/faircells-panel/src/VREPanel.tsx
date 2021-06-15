@@ -4,6 +4,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import { JupyterFrontEnd } from '@jupyterlab/application';
 import { INotebookTracker, NotebookPanel } from '@jupyterlab/notebook';
 import { CellTracker } from './CellTracker'
+import { Dialog, showDialog } from '@jupyterlab/apputils';
 import { Button, CircularProgress, Divider } from '@material-ui/core';
 import { requestAPI } from '@jupyter_vre/core';
 
@@ -63,6 +64,15 @@ export class VREPanel extends React.Component<IProps> {
 
             setTimeout(() => {
                 this.setState({ loading: false });
+                showDialog({
+                    title: 'Local Catalog',
+                    body: (
+                      <p>
+                        Cell successfully added to the catalog
+                      </p>
+                    ),
+                    buttons: [Dialog.okButton()]
+                });
             }, 1500);
         }
     }
